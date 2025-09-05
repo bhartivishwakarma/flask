@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Mini Amazon</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    .product {
+      border: 1px solid #ccc;
+      padding: 15px;
+      margin: 10px;
+      border-radius: 10px;
+      width: 250px;
+      display: inline-block;
+      vertical-align: top;
+    }
+    .product h2 { margin: 0; font-size: 18px; }
+    .product p { margin: 5px 0; }
+    .price { color: green; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h1>Mini Amazon Store</h1>
+  <div id="products"></div>
+  
+
+
+  <script>
+    async function loadProducts() {
+      try {
+        const response = await fetch("/products");
+        const products = await response.json();
+
+        const container = document.getElementById("products");
+        container.innerHTML = products.map(p => `
+          <div class="product">
+            <h2>${p.name}</h2>
+            <p class="price">₹${p.price}</p>
+            <p>${p.description}</p>
+          </div>
+        `).join('');
+      } catch (error) {
+        console.error("Error loading products:", error);
+      }
+    }
+    
+    loadProducts();
+  </script>
+    <h2>Add Product</h2>
+  <form id="productForm">
+    <input id="name" placeholder="Product name" required>
+    <input id="price" type="number" placeholder="Price" required>
+    <input id="description" placeholder="Description" required>
+    <button type="submit">Add</button>
+     </form>
+    
+    
+  <script>
+    document.getElementById("productForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const name = document.getElementById("name").value;
+      const price = document.getElementById("price").value;
+      const description = document.getElementById("description").value;
+
+      const res = await fetch("/add", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, price ,description}),
+      });
+
+      const data = await res.json();
+      console.log("Server response:", data);
+
+      if (res.ok) {
+        alert("✅ Product added: " + data.name);
+      } else {
+        alert("❌ Error: " + data.error);
+      }
+    });
+  
+  </script>
+</body>
+</html>
