@@ -8,9 +8,9 @@ CORS(app)
 # Connect to MySQL
 db = mysql.connector.connect(
     host="localhost",
-    user="root",          # change if needed
-    password="Demo@100",  # change
-    database="shopdb"     # make sure this DB exists
+    user="root",         
+    password="Demo@100", 
+    database="shopdb"    
 )
 @app.route("/")
 def home():
@@ -27,7 +27,7 @@ def get_products():
 def add_data():
     try:
         data = request.get_json()
-        print("📩 Received:", data)
+        print("Received:", data)
 
         name = data.get("name")
         price = int(data.get("price", 0))
@@ -39,10 +39,10 @@ def add_data():
         new_id = cursor.lastrowid
         cursor.close()
 
-        print("✅ Inserted ID:", new_id)
+        print(" Inserted ID:", new_id)
         return jsonify({"id": new_id, "name": name, "price": price,"description":description}), 201
     except Exception as e:
-        print("❌ Error:", e)
+        print("Error:", e)
         return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
