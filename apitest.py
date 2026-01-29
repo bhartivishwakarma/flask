@@ -9,7 +9,7 @@ CORS(app)
 db = mysql.connector.connect(
     host="localhost",
     user="root",         
-    password="Demo@100", 
+    password="-------", 
     database="shopdb"    
 )
 @app.route("/")
